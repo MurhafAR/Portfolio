@@ -16,7 +16,6 @@ export const skillCategoryEnum = pgEnum("skill_category", [
   "DEVOPS_TOOLS",
 ]);
 
-// 1. Singleton Profile & Social Links Table
 export const profile = pgTable("profile", {
   id: serial("id").primaryKey(),
   fullName: text("full_name").notNull().default("Murhaf Abu Rashed"),
@@ -36,7 +35,6 @@ export const profile = pgTable("profile", {
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
-// 2. Editable Skills Table
 export const skills = pgTable("skills", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
@@ -48,7 +46,6 @@ export const skills = pgTable("skills", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
-// 3. Projects Showcase Table
 export const projects = pgTable("projects", {
   id: serial("id").primaryKey(),
   title: text("title").notNull(),

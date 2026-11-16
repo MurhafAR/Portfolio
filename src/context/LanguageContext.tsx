@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useEffect, useSyncExternalStore } from "react";
 
 export type Language = "en" | "ar";
 
@@ -175,29 +175,43 @@ export const translations = {
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
+function subscribeLanguage(callback: () => void) {
+  window.addEventListener("storage", callback);
+  window.addEventListener("languagechange", callback);
+  return () => {
+    window.removeEventListener("storage", callback);
+    window.removeEventListener("languagechange", callback);
+  };
+}
+
+function getLanguageSnapshot(): Language {
+  const saved = localStorage.getItem("preferred_lang");
+  return saved === "ar" ? "ar" : "en";
+}
+
+function getServerLanguageSnapshot(): Language {
+  return "en";
+}
+
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [language, setLanguageState] = useState<Language>("en");
+  const language = useSyncExternalStore(
+    subscribeLanguage,
+    getLanguageSnapshot,
+    getServerLanguageSnapshot
+  );
 
   useEffect(() => {
-    // Restore saved language preference
-    const saved = localStorage.getItem("preferred_lang") as Language | null;
-    if (saved === "ar" || saved === "en") {
-      setLanguageState(saved);
-      document.documentElement.lang = saved;
-      document.documentElement.dir = saved === "ar" ? "rtl" : "ltr";
-    }
-  }, []);
+    document.documentElement.lang = language;
+    document.documentElement.dir = language === "ar" ? "rtl" : "ltr";
+  }, [language]);
 
   const setLanguage = (lang: Language) => {
-    setLanguageState(lang);
     localStorage.setItem("preferred_lang", lang);
-    document.documentElement.lang = lang;
-    document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+    window.dispatchEvent(new Event("languagechange"));
   };
 
   const toggleLanguage = () => {
-    const nextLang = language === "en" ? "ar" : "en";
-    setLanguage(nextLang);
+    setLanguage(language === "en" ? "ar" : "en");
   };
 
   const t = (key: keyof typeof translations.en): string => {

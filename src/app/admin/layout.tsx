@@ -20,7 +20,6 @@ export default async function AdminLayout({
 
   return (
     <div className="min-h-screen bg-zinc-950">
-      {/* Admin Header */}
       <header className="border-b border-zinc-800/60">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <div className="flex items-center gap-3">

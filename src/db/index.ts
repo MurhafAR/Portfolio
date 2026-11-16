@@ -2,18 +2,18 @@ import { neon } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/neon-http";
 import * as schema from "./schema";
 
+// Prioritize IPv4 for environments with broken dual-stack IPv6 routing (e.g. WSL/local Docker)
 if (typeof process !== "undefined" && process.env) {
   try {
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     const dns = require("node:dns");
-    if (dns?.setDefaultResultOrder) {
-      dns.setDefaultResultOrder("ipv4first");
-    }
+    dns?.setDefaultResultOrder?.("ipv4first");
+
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     const { setGlobalDispatcher, Agent } = require("undici");
     setGlobalDispatcher(new Agent({ connect: { family: 4 } }));
   } catch {
-    // browser or edge runtime
+    // Browser or edge runtime fallback
   }
 }
 

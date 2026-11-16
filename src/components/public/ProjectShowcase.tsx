@@ -17,13 +17,11 @@ function ArchitectureModal({
 }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      {/* Backdrop */}
       <div
         className="absolute inset-0 bg-black/70 backdrop-blur-sm"
         onClick={onClose}
       />
 
-      {/* Modal */}
       <div className="relative max-h-[80vh] w-full max-w-2xl overflow-y-auto rounded-2xl border border-zinc-800 bg-zinc-900 p-6 shadow-2xl">
         <div className="flex items-start justify-between mb-4">
           <div>
@@ -40,7 +38,6 @@ function ArchitectureModal({
           </button>
         </div>
 
-        {/* Tech Stack Pills */}
         <div className="flex flex-wrap gap-2 mb-6">
           {project.techStack.map((tech) => (
             <span
@@ -52,7 +49,6 @@ function ArchitectureModal({
           ))}
         </div>
 
-        {/* Architecture Notes */}
         <div className="prose prose-invert prose-sm max-w-none">
           <pre className="whitespace-pre-wrap font-sans text-sm leading-relaxed text-zinc-300">
             {project.architectureNotes}
@@ -95,7 +91,6 @@ export function ProjectShowcase({ projects }: { projects: Project[] }) {
               key={project.id}
               className="group relative overflow-hidden rounded-2xl border border-zinc-800/80 bg-zinc-900/60 transition hover:border-zinc-700"
             >
-              {/* Thumbnail */}
               <div className="relative aspect-video w-full overflow-hidden bg-zinc-800">
                 <Image
                   src={project.thumbnailUrl}
@@ -106,7 +101,6 @@ export function ProjectShowcase({ projects }: { projects: Project[] }) {
                 <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/90 via-zinc-950/20 to-transparent" />
               </div>
 
-              {/* Content */}
               <div className="p-5">
                 <h3 className="text-lg font-bold text-zinc-100">
                   {project.title}
@@ -115,7 +109,6 @@ export function ProjectShowcase({ projects }: { projects: Project[] }) {
                   {project.shortDescription}
                 </p>
 
-                {/* Tech Stack */}
                 <div className="mt-4 flex flex-wrap gap-1.5">
                   {project.techStack.slice(0, 4).map((tech) => (
                     <span
@@ -132,7 +125,6 @@ export function ProjectShowcase({ projects }: { projects: Project[] }) {
                   )}
                 </div>
 
-                {/* Action Buttons */}
                 <div className="mt-5 flex items-center gap-3">
                   {project.githubUrl && (
                     <a
@@ -172,7 +164,6 @@ export function ProjectShowcase({ projects }: { projects: Project[] }) {
         </div>
       )}
 
-      {/* Architecture Modal */}
       {activeModal && (
         <ArchitectureModal
           project={activeModal}

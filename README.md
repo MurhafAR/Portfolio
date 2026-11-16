@@ -1,36 +1,115 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Murhaf Abu Rashed — Full-Stack Portfolio & CMS
+
+A high-performance personal portfolio and dynamic CMS built with Next.js 16 (App Router), TypeScript, Tailwind CSS v4, and PostgreSQL via Drizzle ORM on Neon.
+
+## Features
+
+- **Bilingual Support (EN / AR):** Instant language switching with complete RTL layout support and client-side preference sync.
+- **Dynamic Content Management:** Protected `/admin` dashboard to manage projects, skills, and live availability status without redeploying.
+- **Stateless HMAC Authentication:** Timing-attack resistant session management and route protection via Next.js 16 proxy.
+- **Interactive Project Showcase:** Filterable project cards with architecture deep-dive modals, live links, and repository links.
+- **Skills Bento Grid:** Categorized technical proficiency matrix with progress visualization.
+- **Live GitHub Integration:** Cached server-side fetching of recent repositories and commit activity.
+- **Direct Telegram Channel:** Instant visitor inquiry form that forwards messages directly to Telegram with honeypot spam protection and rate limiting.
+
+## Tech Stack
+
+| Layer | Technologies |
+|---|---|
+| **Framework** | Next.js 16 (App Router, Turbopack, Cache Components) |
+| **Language** | TypeScript |
+| **Styling** | Tailwind CSS v4 |
+| **Database** | PostgreSQL (Neon Serverless) |
+| **ORM & Migrations** | Drizzle ORM, Drizzle Kit |
+| **Validation** | Zod |
+| **Icons** | Lucide React |
+
+## Project Structure
+
+```text
+├── drizzle/                  # Generated SQL migrations
+├── public/                   # Static assets (images, resume)
+├── src/
+│   ├── actions/              # Server Actions for mutations
+│   ├── app/                  # Next.js App Router (public & admin routes)
+│   ├── components/
+│   │   ├── admin/            # CMS management interfaces
+│   │   └── public/           # Public portfolio sections
+│   ├── context/              # Bilingual context & state
+│   ├── db/                   # Database connection, schema, and seed scripts
+│   ├── lib/                  # Authentication, session helpers, validators
+│   └── proxy.ts              # Next.js 16 proxy / route guards
+├── drizzle.config.ts         # Drizzle Kit configuration
+└── next.config.ts            # Next.js configuration
+```
 
 ## Getting Started
 
-First, run the development server:
+### 1. Prerequisites
+
+- Node.js 20+
+- PostgreSQL database (or [Neon](https://neon.tech) account)
+
+### 2. Environment Variables
+
+Create `.env.local` based on `.env.example`:
+
+```bash
+cp .env.example .env.local
+```
+
+Configure your variables:
+
+```env
+# Database (Neon / PostgreSQL)
+DATABASE_URL=postgresql://user:password@host/dbname?sslmode=require
+DATABASE_URL_UNPOOLED=postgresql://user:password@host/dbname?sslmode=require
+DATABASE_URL_POOLED=postgresql://user:password@host/dbname?sslmode=require
+
+# Admin Authentication
+ADMIN_EMAIL=your-email@example.com
+ADMIN_PASSWORD=your-secure-password
+AUTH_SECRET=your-random-32-character-secret
+
+# Telegram Notifications (Optional)
+TELEGRAM_BOT_TOKEN=your-bot-token
+TELEGRAM_CHAT_ID=your-chat-id
+```
+
+### 3. Database Setup
+
+Push the schema migrations and seed initial data:
+
+```bash
+# Push schema to database
+npm run db:push
+
+# Seed default profile & skills
+npm run db:seed
+```
+
+### 4. Development
+
+Run the local development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to view the portfolio.  
+Access [http://localhost:3000/admin](http://localhost:3000/admin) to manage your skills, projects, and profile.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `npm run dev` — Start Turbopack development server
+- `npm run build` — Build production bundle
+- `npm run start` — Run production server
+- `npm run lint` — Run ESLint checks
+- `npm run db:generate` — Generate Drizzle migration files
+- `npm run db:migrate` — Execute migrations against database
+- `npm run db:push` — Generate and apply migrations in one step
+- `npm run db:seed` — Populate database with default profile and skills
 
-## Learn More
+## License
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT © [Murhaf Abu Rashed](https://github.com/murhaf)

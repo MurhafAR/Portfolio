@@ -1,4 +1,3 @@
-// src/lib/auth.ts
 "use server";
 
 import { cookies } from "next/headers";
@@ -11,12 +10,7 @@ import {
   verifyToken,
 } from "./session";
 
-/**
- * Validates admin session cookie.
- */
-export async function getAdminSession(): Promise<{
-  email: string;
-} | null> {
+export async function getAdminSession(): Promise<{ email: string } | null> {
   const cookieStore = await cookies();
   const session = cookieStore.get(SESSION_COOKIE);
   if (!session?.value) return null;
@@ -35,9 +29,6 @@ export async function getAdminSession(): Promise<{
   return null;
 }
 
-/**
- * Guard used in Server Actions — throws if not authenticated.
- */
 export async function requireAdminSession() {
   const session = await getAdminSession();
   if (!session) {
@@ -46,9 +37,6 @@ export async function requireAdminSession() {
   return session;
 }
 
-/**
- * Admin login action with constant-time password check and HMAC signed cookie.
- */
 export async function loginAdmin(
   email: string,
   password: string
@@ -63,7 +51,7 @@ export async function loginAdmin(
     return { error: "Invalid credentials" };
   }
 
-  const exp = Date.now() + 7 * 24 * 60 * 60 * 1000; // 7 days
+  const exp = Date.now() + 7 * 24 * 60 * 60 * 1000;
   const token = signToken({ email: ADMIN_EMAIL, exp });
 
   const cookieStore = await cookies();
@@ -72,15 +60,12 @@ export async function loginAdmin(
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
     path: "/",
-    maxAge: 60 * 60 * 24 * 7, // 7 days
+    maxAge: 60 * 60 * 24 * 7,
   });
 
   return { success: true };
 }
 
-/**
- * Logout action.
- */
 export async function logoutAdmin() {
   const cookieStore = await cookies();
   cookieStore.delete(SESSION_COOKIE);

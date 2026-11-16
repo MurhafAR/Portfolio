@@ -1,6 +1,5 @@
 import { z } from "zod";
 
-// Skill validation schema
 export const SkillSchema = z.object({
   id: z.number().optional(),
   name: z.string().min(1, "Skill name is required").max(50),
@@ -10,7 +9,6 @@ export const SkillSchema = z.object({
   isVisible: z.boolean().default(true),
 });
 
-// Project validation schema
 export const ProjectSchema = z.object({
   id: z.number().optional(),
   title: z.string().min(1, "Project title is required").max(100),
@@ -29,7 +27,6 @@ export const ProjectSchema = z.object({
   displayOrder: z.coerce.number().default(0),
 });
 
-// Profile validation schema
 export const ProfileSchema = z.object({
   fullName: z.string().min(1).max(100),
   headline: z.string().min(1).max(200),

@@ -108,7 +108,6 @@ export function ProjectManager({
 
   return (
     <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
-      {/* Left: Add / Edit Project Form */}
       <form
         onSubmit={handleSubmit}
         className="space-y-4 rounded-2xl border border-zinc-800 bg-zinc-900/60 p-6 lg:col-span-5 h-fit"
@@ -289,7 +288,6 @@ export function ProjectManager({
         </button>
       </form>
 
-      {/* Right: Existing Projects List */}
       <div className="space-y-4 lg:col-span-7">
         <h4 className="text-xs font-bold uppercase tracking-wider text-zinc-400">
           Projects ({initialProjects.length})

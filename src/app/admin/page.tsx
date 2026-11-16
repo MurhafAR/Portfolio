@@ -25,7 +25,6 @@ export default async function AdminOverview() {
         </p>
       </div>
 
-      {/* Quick Stats */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         <div className="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-5">
           <div className="flex items-center gap-3">
@@ -70,7 +69,6 @@ export default async function AdminOverview() {
         </div>
       </div>
 
-      {/* Quick Links */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <Link
           href="/admin/skills"
@@ -97,7 +95,6 @@ export default async function AdminOverview() {
         </Link>
       </div>
 
-      {/* Profile & Live Status Management */}
       {profileData && (
         <div className="space-y-4 pt-4 border-t border-zinc-800/80">
           <div>

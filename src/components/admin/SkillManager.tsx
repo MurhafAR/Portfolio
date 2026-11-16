@@ -82,7 +82,6 @@ export function SkillManager({ initialSkills }: { initialSkills: Skill[] }) {
 
   return (
     <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
-      {/* Left: Add / Edit Skill Form */}
       <form
         onSubmit={handleSubmit}
         className="space-y-4 rounded-2xl border border-zinc-800 bg-zinc-900/60 p-6 lg:col-span-4 h-fit"
@@ -188,7 +187,6 @@ export function SkillManager({ initialSkills }: { initialSkills: Skill[] }) {
         </button>
       </form>
 
-      {/* Right: Existing Skills List by Category */}
       <div className="space-y-6 lg:col-span-8">
         {CATEGORIES.map((cat) => {
           const catSkills = initialSkills.filter(

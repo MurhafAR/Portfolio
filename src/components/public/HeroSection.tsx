@@ -16,7 +16,6 @@ export function HeroSection({ profile }: { profile: Profile }) {
   return (
     <section className="relative mx-auto max-w-6xl px-6 pt-16 pb-16 md:py-24">
       <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12">
-        {/* Left Column: Intro, Bio & Social CTAs */}
         <div className="space-y-6 lg:col-span-7">
           {profile.isAvailable && (
             <div className="inline-flex items-center gap-2.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-1.5 text-xs font-medium text-emerald-400">
@@ -43,7 +42,6 @@ export function HeroSection({ profile }: { profile: Profile }) {
             {bio}
           </p>
 
-          {/* Social Links & Resume Bar */}
           <div className="flex flex-wrap items-center gap-4 pt-2">
             <a
               href={profile.githubUrl}
@@ -89,9 +87,7 @@ export function HeroSection({ profile }: { profile: Profile }) {
           </div>
         </div>
 
-        {/* Right Column: Framed Developer Portrait */}
         <div className="relative mx-auto w-full max-w-sm lg:col-span-5">
-          {/* Ambient Glow Behind Portrait */}
           <div className="absolute -inset-2 rounded-3xl bg-gradient-to-tr from-indigo-500/30 via-cyan-500/20 to-emerald-500/30 blur-2xl" />
 
           <div className="relative overflow-hidden rounded-3xl border border-zinc-800/80 bg-zinc-900/90 p-2 shadow-2xl">
@@ -103,11 +99,9 @@ export function HeroSection({ profile }: { profile: Profile }) {
                 priority
                 className="object-cover object-top transition duration-500 hover:scale-105"
               />
-              {/* Subtle bottom vignette */}
               <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/80 via-transparent to-transparent" />
             </div>
 
-            {/* Floating Tech Stack Badge on Portrait */}
             <div className="absolute bottom-5 left-5 right-5 flex items-center justify-between rounded-xl border border-zinc-700/60 bg-zinc-900/90 px-4 py-3 backdrop-blur-md">
               <div className="flex items-center gap-2.5">
                 <Terminal className="h-4 w-4 text-cyan-400" />

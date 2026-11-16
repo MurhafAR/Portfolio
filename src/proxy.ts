@@ -9,10 +9,9 @@ import {
 
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
-
   const sessionCookie = request.cookies.get(SESSION_COOKIE)?.value;
-  let isAuthenticated = false;
 
+  let isAuthenticated = false;
   if (sessionCookie) {
     const verified = verifyToken(sessionCookie);
     if (
@@ -26,20 +25,12 @@ export function proxy(request: NextRequest) {
     }
   }
 
-  // 1. If accessing /admin or subpaths and not authenticated -> redirect to /login
-  if (pathname.startsWith("/admin")) {
-    if (!isAuthenticated) {
-      const loginUrl = new URL("/login", request.url);
-      return NextResponse.redirect(loginUrl);
-    }
+  if (pathname.startsWith("/admin") && !isAuthenticated) {
+    return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  // 2. If accessing /login and already authenticated -> redirect to /admin
-  if (pathname === "/login") {
-    if (isAuthenticated) {
-      const adminUrl = new URL("/admin", request.url);
-      return NextResponse.redirect(adminUrl);
-    }
+  if (pathname === "/login" && isAuthenticated) {
+    return NextResponse.redirect(new URL("/admin", request.url));
   }
 
   return NextResponse.next();

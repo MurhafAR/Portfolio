@@ -5,8 +5,7 @@ import { skills } from "@/db/schema";
 import { eq, asc } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { requireAdminSession } from "@/lib/auth";
-import { SkillSchema } from "@/lib/validators";
-import type { SkillInput } from "@/lib/validators";
+import { SkillSchema, type SkillInput } from "@/lib/validators";
 
 export async function getSkills() {
   return db.select().from(skills).orderBy(asc(skills.displayOrder));
@@ -20,10 +19,11 @@ export async function getVisibleSkills() {
     .orderBy(asc(skills.displayOrder));
 }
 
-export async function upsertSkillAction(
+export async function upsertSkill(
   input: SkillInput
 ): Promise<{ success: true } | { success: false; error: string }> {
   await requireAdminSession();
+
   const parsed = SkillSchema.safeParse(input);
   if (!parsed.success) {
     return {
@@ -32,54 +32,40 @@ export async function upsertSkillAction(
     };
   }
 
-  const data = parsed.data;
+  const { id, ...values } = parsed.data;
 
   try {
-    if (data.id) {
-      await db
-        .update(skills)
-        .set({
-          name: data.name,
-          category: data.category,
-          proficiency: data.proficiency,
-          displayOrder: data.displayOrder,
-          isVisible: data.isVisible,
-        })
-        .where(eq(skills.id, data.id));
+    if (id) {
+      await db.update(skills).set(values).where(eq(skills.id, id));
     } else {
-      await db.insert(skills).values({
-        name: data.name,
-        category: data.category,
-        proficiency: data.proficiency,
-        displayOrder: data.displayOrder,
-        isVisible: data.isVisible,
-      });
+      await db.insert(skills).values(values);
     }
 
     revalidatePath("/");
     revalidatePath("/admin/skills");
     return { success: true };
-  } catch (error: any) {
-    return {
-      success: false,
-      error: error?.message || "Failed to save skill",
-    };
+  } catch (err) {
+    const error = err instanceof Error ? err.message : "Failed to save skill";
+    return { success: false, error };
   }
 }
 
-export async function deleteSkillAction(
+export async function deleteSkill(
   id: number
 ): Promise<{ success: true } | { success: false; error: string }> {
   await requireAdminSession();
+
   try {
     await db.delete(skills).where(eq(skills.id, id));
     revalidatePath("/");
     revalidatePath("/admin/skills");
     return { success: true };
-  } catch (error: any) {
-    return {
-      success: false,
-      error: error?.message || "Failed to delete skill",
-    };
+  } catch (err) {
+    const error = err instanceof Error ? err.message : "Failed to delete skill";
+    return { success: false, error };
   }
 }
+
+// Aliases for compatibility
+export const upsertSkillAction = upsertSkill;
+export const deleteSkillAction = deleteSkill;

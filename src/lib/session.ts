@@ -9,15 +9,15 @@ export const SESSION_COOKIE = "admin-session";
 
 export interface SessionData {
   email: string;
-  exp: number; // Expiration timestamp in ms
+  exp: number;
 }
 
-/**
- * Constant-time string comparison to prevent timing attacks.
- */
+// Constant-time string equality check to avoid timing leaks
 export function timingSafeEqualStr(a: string, b: string): boolean {
   const aBuf = Buffer.from(a, "utf-8");
   const bBuf = Buffer.from(b, "utf-8");
+
+  // crypto.timingSafeEqual throws if buffer byteLengths differ
   if (aBuf.length !== bBuf.length) {
     crypto.timingSafeEqual(aBuf, aBuf);
     return false;
@@ -25,9 +25,6 @@ export function timingSafeEqualStr(a: string, b: string): boolean {
   return crypto.timingSafeEqual(aBuf, bBuf);
 }
 
-/**
- * Create a cryptographically signed HMAC-SHA256 session token.
- */
 export function signToken(data: SessionData): string {
   const payload = Buffer.from(JSON.stringify(data), "utf-8").toString(
     "base64url"
@@ -39,9 +36,6 @@ export function signToken(data: SessionData): string {
   return `${payload}.${signature}`;
 }
 
-/**
- * Verify HMAC-SHA256 signature and expiration of session token.
- */
 export function verifyToken(token: string): SessionData | null {
   const parts = token.split(".");
   if (parts.length !== 2) return null;
@@ -56,7 +50,7 @@ export function verifyToken(token: string): SessionData | null {
   const expBuf = Buffer.from(expectedSignature, "utf-8");
 
   if (sigBuf.length !== expBuf.length || !crypto.timingSafeEqual(sigBuf, expBuf)) {
-    return null; // Invalid signature / tampered cookie
+    return null;
   }
 
   try {
@@ -64,7 +58,7 @@ export function verifyToken(token: string): SessionData | null {
       Buffer.from(payload, "base64url").toString("utf-8")
     );
     if (typeof data.exp !== "number" || data.exp < Date.now()) {
-      return null; // Expired token
+      return null;
     }
     return data;
   } catch {

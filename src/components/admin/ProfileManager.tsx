@@ -64,7 +64,6 @@ export function ProfileManager({ profile }: { profile: Profile }) {
         </div>
       )}
 
-      {/* Availability Status Card */}
       <div className="rounded-2xl border border-zinc-800 bg-zinc-900/40 p-6 space-y-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2.5">
@@ -107,7 +106,6 @@ export function ProfileManager({ profile }: { profile: Profile }) {
         </div>
       </div>
 
-      {/* Basic Info */}
       <div className="rounded-2xl border border-zinc-800 bg-zinc-900/40 p-6 space-y-4">
         <div className="flex items-center gap-2.5 mb-2">
           <User className="h-5 w-5 text-indigo-400" />
@@ -171,7 +169,6 @@ export function ProfileManager({ profile }: { profile: Profile }) {
         </div>
       </div>
 
-      {/* Social Links & Resume */}
       <div className="rounded-2xl border border-zinc-800 bg-zinc-900/40 p-6 space-y-4">
         <div className="flex items-center gap-2.5 mb-2">
           <LinkIcon className="h-5 w-5 text-indigo-400" />

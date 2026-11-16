@@ -8,7 +8,7 @@ if (typeof process !== "undefined" && process.env) {
     const { setGlobalDispatcher, Agent } = require("undici");
     setGlobalDispatcher(new Agent({ connect: { family: 4 } }));
   } catch {
-    // ignore
+    // Browser or edge fallback
   }
 }
 
@@ -18,12 +18,12 @@ async function runMigrations() {
   const sql = neon(connectionString);
   const db = drizzle(sql);
 
-  console.log("🚀 Running Drizzle migrations on Neon...");
+  console.log("Running Drizzle migrations...");
   await migrate(db, { migrationsFolder: "./drizzle" });
-  console.log("✅ Migrations completed successfully!");
+  console.log("Migrations applied successfully.");
 }
 
 runMigrations().catch((err) => {
-  console.error("❌ Migration failed:", err);
+  console.error("Migration failed:", err);
   process.exit(1);
 });

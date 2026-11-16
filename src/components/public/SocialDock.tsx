@@ -14,7 +14,6 @@ export function SocialDock({ profile }: { profile: Profile }) {
   return (
     <div className="fixed bottom-6 inset-x-0 z-40 flex justify-center px-4 pointer-events-none">
       <div className="pointer-events-auto flex items-center gap-2 rounded-2xl border border-zinc-800/80 bg-zinc-950/85 px-4 py-2.5 shadow-2xl backdrop-blur-xl">
-        {/* Social Links */}
         <a
           href={profile.githubUrl}
           target="_blank"
@@ -47,7 +46,6 @@ export function SocialDock({ profile }: { profile: Profile }) {
 
         <div className="h-4 w-[1px] bg-zinc-800 mx-1" />
 
-        {/* Contact CTA */}
         <a
           href="#contact"
           className="rounded-xl bg-indigo-600/20 border border-indigo-500/30 px-3 py-1.5 text-xs font-semibold text-indigo-300 hover:bg-indigo-600/30 transition"
@@ -55,7 +53,6 @@ export function SocialDock({ profile }: { profile: Profile }) {
           {t("dockGetInTouch")}
         </a>
 
-        {/* Resume */}
         {profile.resumeUrl && (
           <a
             href={profile.resumeUrl}
@@ -68,7 +65,6 @@ export function SocialDock({ profile }: { profile: Profile }) {
           </a>
         )}
 
-        {/* Quick Language Toggle */}
         <button
           onClick={toggleLanguage}
           className="flex items-center gap-1 rounded-xl p-2 text-zinc-400 hover:bg-zinc-800 hover:text-indigo-400 transition"
@@ -78,7 +74,6 @@ export function SocialDock({ profile }: { profile: Profile }) {
           <span className="text-[11px] font-bold uppercase">{language === "en" ? "ar" : "en"}</span>
         </button>
 
-        {/* Scroll to Top */}
         <button
           onClick={scrollToTop}
           className="rounded-xl p-2 text-zinc-500 hover:bg-zinc-800 hover:text-zinc-300 transition"

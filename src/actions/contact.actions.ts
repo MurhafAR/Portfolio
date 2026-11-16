@@ -7,22 +7,22 @@ const ContactSchema = z.object({
   name: z.string().min(1, "Name is required").max(100),
   contact: z.string().min(1, "Email or handle is required").max(100),
   message: z.string().min(5, "Message must be at least 5 characters").max(2000),
-  hp: z.string().optional(), // Honeypot field for bot suppression
+  hp: z.string().optional(),
 });
 
 export type ContactInput = z.infer<typeof ContactSchema>;
 
-// Simple in-memory rate limiting: max 5 inquiries per 5 minutes per IP
-const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
+// In-memory rate limiting: 5 messages per 5 minutes per client IP
+const rateLimits = new Map<string, { count: number; resetAt: number }>();
 
 function isRateLimited(ip: string): boolean {
   const now = Date.now();
-  const windowMs = 5 * 60 * 1000; // 5 minutes
+  const windowMs = 5 * 60 * 1000;
   const maxRequests = 5;
 
-  const record = rateLimitMap.get(ip);
-  if (!record || now > record.resetTime) {
-    rateLimitMap.set(ip, { count: 1, resetTime: now + windowMs });
+  const record = rateLimits.get(ip);
+  if (!record || now > record.resetAt) {
+    rateLimits.set(ip, { count: 1, resetAt: now + windowMs });
     return false;
   }
 
@@ -43,7 +43,7 @@ function escapeHtml(str: string): string {
     .replace(/'/g, "&#039;");
 }
 
-export async function sendTelegramInquiryAction(input: ContactInput) {
+export async function sendTelegramInquiry(input: ContactInput) {
   const parsed = ContactSchema.safeParse(input);
   if (!parsed.success) {
     return {
@@ -52,12 +52,11 @@ export async function sendTelegramInquiryAction(input: ContactInput) {
     };
   }
 
-  // 1. Bot honeypot check: If honeypot is filled, discard silently
-  if (parsed.data.hp && parsed.data.hp.trim().length > 0) {
+  // Silent discard if spam bot triggered the honeypot
+  if (parsed.data.hp?.trim()) {
     return { success: true };
   }
 
-  // 2. IP Rate limiting
   const headerList = await headers();
   const ip =
     headerList.get("x-forwarded-for")?.split(",")[0]?.trim() ||
@@ -75,12 +74,15 @@ export async function sendTelegramInquiryAction(input: ContactInput) {
   const botToken = process.env.TELEGRAM_BOT_TOKEN;
   const chatId = process.env.TELEGRAM_CHAT_ID;
 
-  // 3. Format message safely with HTML escaping (immune to Telegram Markdown entity crashes)
-  const formattedHtml =
-    `📬 <b>New Portfolio Inquiry</b>\n\n` +
-    `<b>From:</b> ${escapeHtml(name)}\n` +
-    `<b>Contact:</b> ${escapeHtml(contact)}\n\n` +
-    `<b>Message:</b>\n${escapeHtml(message)}`;
+  const formattedHtml = [
+    "📬 <b>New Portfolio Inquiry</b>",
+    "",
+    `<b>From:</b> ${escapeHtml(name)}`,
+    `<b>Contact:</b> ${escapeHtml(contact)}`,
+    "",
+    "<b>Message:</b>",
+    escapeHtml(message),
+  ].join("\n");
 
   if (botToken && chatId) {
     try {
@@ -116,10 +118,12 @@ export async function sendTelegramInquiryAction(input: ContactInput) {
     }
   }
 
-  // Fallback when bot token is not configured yet in .env
-  console.log("Portfolio contact inquiry received:", { name, contact, message });
+  // Local fallback if bot credentials are not set up in development
+  console.log("Portfolio inquiry received (dev mode):", { name, contact, message });
   return {
     success: true,
     fallback: true,
   };
 }
+
+export const sendTelegramInquiryAction = sendTelegramInquiry;

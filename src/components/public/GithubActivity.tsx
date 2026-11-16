@@ -5,7 +5,7 @@ async function getGitHubRepos(username: string): Promise<GitHubRepo[]> {
     const res = await fetch(
       `https://api.github.com/users/${username}/repos?sort=updated&per_page=4`,
       {
-        next: { revalidate: 3600 }, // Cache for 1 hour
+        next: { revalidate: 3600 },
         headers: {
           Accept: "application/vnd.github.v3+json",
           "User-Agent": "portfolio-app",
@@ -25,7 +25,6 @@ async function getGitHubRepos(username: string): Promise<GitHubRepo[]> {
 }
 
 export async function GithubActivity({ githubUrl }: { githubUrl: string }) {
-  // Extract username from githubUrl (e.g. "https://github.com/murhaf" -> "murhaf")
   const username = githubUrl.split("/").filter(Boolean).pop() || "murhaf";
   const repos = await getGitHubRepos(username);
 

@@ -43,12 +43,10 @@ export function ContactTelegram({ telegramUrl }: { telegramUrl: string }) {
   return (
     <section id="contact" className="mx-auto max-w-4xl px-6 py-20">
       <div className="relative overflow-hidden rounded-3xl border border-zinc-800 bg-gradient-to-b from-zinc-900/80 to-zinc-950 p-8 md:p-12 shadow-2xl backdrop-blur-xl">
-        {/* Glow */}
         <div className="absolute -top-24 -right-24 h-64 w-64 rounded-full bg-sky-500/10 blur-3xl" />
         <div className="absolute -bottom-24 -left-24 h-64 w-64 rounded-full bg-indigo-500/10 blur-3xl" />
 
         <div className="relative z-10 grid grid-cols-1 gap-10 md:grid-cols-12">
-          {/* Left: Info */}
           <div className="md:col-span-5 space-y-4">
             <div className="inline-flex items-center gap-2 rounded-full border border-sky-500/30 bg-sky-500/10 px-3.5 py-1 text-xs font-semibold text-sky-400">
               <MessageSquare className="h-3.5 w-3.5" />
@@ -74,7 +72,6 @@ export function ContactTelegram({ telegramUrl }: { telegramUrl: string }) {
             </div>
           </div>
 
-          {/* Right: Form */}
           <div className="md:col-span-7">
             {status === "success" ? (
               <div className="rounded-2xl border border-emerald-500/30 bg-emerald-500/10 p-6 text-center space-y-3">
@@ -90,7 +87,6 @@ export function ContactTelegram({ telegramUrl }: { telegramUrl: string }) {
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">
-                {/* Honeypot field for bot suppression */}
                 <input
                   type="text"
                   name="user_website"
